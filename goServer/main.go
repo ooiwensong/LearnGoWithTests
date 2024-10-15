@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	server := &PlayerServer{NewInMemoryPlayerStore()}
+	server := NewPlayerServer(NewInMemoryPlayerStore())
 
 	// type casting PlayerServer function to HandlerFunc so that it implements ServeHTTP()
 	// handler := http.HandlerFunc(PlayerServer)
