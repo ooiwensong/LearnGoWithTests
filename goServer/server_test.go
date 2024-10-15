@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,10 +12,10 @@ import (
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string
-	league   []Player
+	league   League
 }
 
-func (s *StubPlayerStore) GetLeague() []Player {
+func (s *StubPlayerStore) GetLeague() League {
 	return s.league
 }
 
@@ -140,17 +139,23 @@ func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want s
 	}
 }
 
-func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
+func getLeagueFromResponse(t testing.TB, body io.Reader) []Player /* (league []Player) */ {
 	t.Helper()
+	/**
+
 	// a Decoder takes a io.Reader and performs Decode to parse JSON into
 	// our data model
 	err := json.NewDecoder(body).Decode(&league) // variable "league" declared in function signature
+
+	**/
+
+	league, err := NewLeague(body)
 
 	if err != nil {
 		t.Fatalf("unable to parse response from server %q into slice of Player, '%v'", body, err)
 	}
 
-	return
+	return league
 }
 
 func assertLeague(t testing.TB, got, want []Player) {
