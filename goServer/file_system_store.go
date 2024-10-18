@@ -1,4 +1,4 @@
-package main
+package poker
 
 import (
 	"encoding/json"
@@ -11,6 +11,30 @@ import (
 type FileSystemPlayerStore struct {
 	database *json.Encoder
 	league   League
+}
+
+func FileSystemPlayerStoreFromFile(path string) (*FileSystemPlayerStore, func(), error) {
+	// 2nd argument defines permissions for opening the file
+	// os.O_RDWR means we want to read & write
+	// os.O_CREATE means create the file if it does not exist
+	// 3rd argument sets permissions for the file; 0666 means all users can RDWR the file
+	db, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
+
+	if err != nil {
+		return nil, nil, fmt.Errorf("problem opening %s %v", path, err)
+	}
+
+	closeFunc := func() {
+		db.Close()
+	}
+
+	store, err := NewFileSystemPlayerStore(db)
+
+	if err != nil {
+		return nil, nil, fmt.Errorf("problem creating file system player store, %v", err)
+	}
+
+	return store, closeFunc, nil
 }
 
 func initialisePlayerDBFile(file *os.File) error {

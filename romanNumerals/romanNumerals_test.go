@@ -66,7 +66,7 @@ func TestConvertingToArabic(t *testing.T) {
 }
 
 func TestPropertiesOfConversion(t *testing.T) {
-	assertion := func(arabic uint16) bool {
+	Assertion := func(arabic uint16) bool {
 		if arabic > 3999 {
 			return true
 		}
@@ -75,7 +75,7 @@ func TestPropertiesOfConversion(t *testing.T) {
 		fromRoman := ConvertToArabic(roman)
 		return fromRoman == arabic
 	}
-	if err := quick.Check(assertion, nil); err != nil {
+	if err := quick.Check(Assertion, nil); err != nil {
 		t.Error("failed checks", err)
 	}
 }

@@ -11,7 +11,7 @@ func TestWallet(t *testing.T) {
 
 		wallet.Deposit(Bitcoin(10))
 
-		assertBalance(t, wallet, Bitcoin(10))
+		AssertBalance(t, wallet, Bitcoin(10))
 	})
 
 	t.Run("withdraw with funds", func(t *testing.T) {
@@ -19,20 +19,20 @@ func TestWallet(t *testing.T) {
 
 		err := wallet.Withdraw(Bitcoin(10))
 
-		assertNoError(t, err)
-		assertBalance(t, wallet, Bitcoin(10))
+		AssertNoError(t, err)
+		AssertBalance(t, wallet, Bitcoin(10))
 	})
 
 	t.Run("withdraw insufficient funds", func(t *testing.T) {
 		wallet := Wallet{}
 		err := wallet.Withdraw(Bitcoin(10))
 
-		assertError(t, err, ErrInsufficientFunds)
-		assertBalance(t, wallet, Bitcoin(0))
+		AssertError(t, err, ErrInsufficientFunds)
+		AssertBalance(t, wallet, Bitcoin(0))
 	})
 }
 
-func assertBalance(t testing.TB, wallet Wallet, want Bitcoin) {
+func AssertBalance(t testing.TB, wallet Wallet, want Bitcoin) {
 	t.Helper()
 
 	got := wallet.Balance()
@@ -42,7 +42,7 @@ func assertBalance(t testing.TB, wallet Wallet, want Bitcoin) {
 	}
 }
 
-func assertError(t testing.TB, got error, want error) {
+func AssertError(t testing.TB, got error, want error) {
 	t.Helper()
 
 	// t.Fatal will stop the test if error == nil, this prevents the code from
@@ -61,7 +61,7 @@ func assertError(t testing.TB, got error, want error) {
 	}
 }
 
-func assertNoError(t testing.TB, got error) {
+func AssertNoError(t testing.TB, got error) {
 	t.Helper()
 	if got != nil {
 		t.Fatal("got an error but didn't want one")

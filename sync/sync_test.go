@@ -12,7 +12,7 @@ func TestCounter(t *testing.T) {
 		counter.Inc()
 		counter.Inc()
 
-		assertCounter(t, counter, 3)
+		AssertCounter(t, counter, 3)
 	})
 
 	t.Run("it runs concurrently", func(t *testing.T) {
@@ -30,13 +30,13 @@ func TestCounter(t *testing.T) {
 		}
 		wg.Wait() // Wait() is used to block until all goroutines have finished
 
-		assertCounter(t, counter, wantedCount)
+		AssertCounter(t, counter, wantedCount)
 	})
 }
 
 // We have to pass Counter by reference rather than by value
 // else a copy of the mutex will be created which is not good
-func assertCounter(t testing.TB, got *Counter, want int) {
+func AssertCounter(t testing.TB, got *Counter, want int) {
 	t.Helper()
 	if got.Value() != want {
 		t.Errorf("got %d, want %d", got.Value(), want)

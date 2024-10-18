@@ -42,7 +42,7 @@ M`
 World`,
 	}
 
-	assertPost(t, got, want)
+	AssertPost(t, got, want)
 
 	if err != nil {
 		t.Fatal(err)
@@ -53,7 +53,7 @@ World`,
 	}
 }
 
-func assertPost(t *testing.T, got blogposts.Post, want blogposts.Post) {
+func AssertPost(t *testing.T, got blogposts.Post, want blogposts.Post) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %+v, want %+v", got, want)

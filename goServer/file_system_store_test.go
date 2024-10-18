@@ -1,4 +1,4 @@
-package main
+package poker
 
 import (
 	"os"
@@ -6,38 +6,39 @@ import (
 )
 
 func TestFileSystemStore(t *testing.T) {
-	t.Run("league from a reader", func(t *testing.T) {
-		database, cleanDatabase := createTempFile(t, `[
-		{"Name": "Cleo", "Wins":10},
-		{"Name": "Chris", "Wins":33}]`)
-		defer cleanDatabase()
 
-		/**
+	// t.Run("league from a reader", func(t *testing.T) {
+	// 	database, cleanDatabase := createTempFile(t, `[
+	// 	{"Name": "Cleo", "Wins":10},
+	// 	{"Name": "Chris", "Wins":33}]`)
+	// 	defer cleanDatabase()
 
-		// NewReader returns a Reader which implements ReadSeeker
-		database := strings.NewReader(`[
-		{"Name": "Cleo", "Wins":10},
-		{"Name": "Chris", "Wins":33}]`)
+	// 	/**
 
-		**/
+	// 	// NewReader returns a Reader which implements ReadSeeker
+	// 	database := strings.NewReader(`[
+	// 	{"Name": "Cleo", "Wins":10},
+	// 	{"Name": "Chris", "Wins":33}]`)
 
-		// Uses a Reader to read data from database
-		store, err := NewFileSystemPlayerStore(database)
+	// 	**/
 
-		assertNoError(t, err)
+	// 	// Uses a Reader to read data from database
+	// 	store, err := NewFileSystemPlayerStore(database)
 
-		got := store.GetLeague()
-		want := []Player{
-			{"Cleo", 10},
-			{"Chris", 33},
-		}
+	// 	AssertNoError(t, err)
 
-		assertLeague(t, got, want)
+	// 	got := store.GetLeague()
+	// 	want := []Player{
+	// 		{"Cleo", 10},
+	// 		{"Chris", 33},
+	// 	}
 
-		// read again
-		got = store.GetLeague()
-		assertLeague(t, got, want)
-	})
+	// 	AssertLeague(t, got, want)
+
+	// 	// read again
+	// 	got = store.GetLeague()
+	// 	AssertLeague(t, got, want)
+	// })
 
 	t.Run("get player score", func(t *testing.T) {
 		database, cleanDatabase := createTempFile(t, `[
@@ -47,11 +48,11 @@ func TestFileSystemStore(t *testing.T) {
 
 		store, err := NewFileSystemPlayerStore(database)
 
-		assertNoError(t, err)
+		AssertNoError(t, err)
 
 		got := store.GetPlayerScore("Chris")
 		want := 33
-		assertScoreEquals(t, got, want)
+		AssertScoreEquals(t, got, want)
 	})
 
 	t.Run("store wins for existing players", func(t *testing.T) {
@@ -62,13 +63,13 @@ func TestFileSystemStore(t *testing.T) {
 
 		store, err := NewFileSystemPlayerStore(database)
 
-		assertNoError(t, err)
+		AssertNoError(t, err)
 
 		store.RecordWin("Chris")
 
 		got := store.GetPlayerScore("Chris")
 		want := 34
-		assertScoreEquals(t, got, want)
+		AssertScoreEquals(t, got, want)
 	})
 
 	t.Run("store wins for new players", func(t *testing.T) {
@@ -79,13 +80,13 @@ func TestFileSystemStore(t *testing.T) {
 
 		store, err := NewFileSystemPlayerStore(database)
 
-		assertNoError(t, err)
+		AssertNoError(t, err)
 
 		store.RecordWin("Pepper")
 
 		got := store.GetPlayerScore("Pepper")
 		want := 1
-		assertScoreEquals(t, got, want)
+		AssertScoreEquals(t, got, want)
 	})
 
 	t.Run("works with an empty file", func(t *testing.T) {
@@ -94,7 +95,7 @@ func TestFileSystemStore(t *testing.T) {
 
 		_, err := NewFileSystemPlayerStore(database)
 
-		assertNoError(t, err)
+		AssertNoError(t, err)
 	})
 
 	t.Run("league is sorted", func(t *testing.T) {
@@ -105,18 +106,18 @@ func TestFileSystemStore(t *testing.T) {
 
 		store, err := NewFileSystemPlayerStore(database)
 
-		assertNoError(t, err)
+		AssertNoError(t, err)
 
 		got := store.GetLeague()
 		want := League{
 			{"Chris", 33},
 			{"Cleo", 10},
 		}
-		assertLeague(t, got, want)
+		AssertLeague(t, got, want)
 
 		// read again
 		got = store.GetLeague()
-		assertLeague(t, got, want)
+		AssertLeague(t, got, want)
 	})
 }
 
@@ -137,14 +138,14 @@ func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	return tmpFile, removeFile
 }
 
-func assertScoreEquals(t testing.TB, got, want int) {
+func AssertScoreEquals(t testing.TB, got, want int) {
 	t.Helper()
 	if got != want {
 		t.Errorf("got %d want %d", got, want)
 	}
 }
 
-func assertNoError(t testing.TB, err error) {
+func AssertNoError(t testing.TB, err error) {
 	t.Helper()
 	if err != nil {
 		t.Fatalf("didn't expect an error but got one, %v", err)

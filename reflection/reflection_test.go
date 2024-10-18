@@ -103,8 +103,8 @@ func TestWalk(t *testing.T) {
 			got = append(got, input)
 		})
 
-		assertContains(t, got, "Moo")
-		assertContains(t, got, "Baa")
+		AssertContains(t, got, "Moo")
+		AssertContains(t, got, "Baa")
 	})
 
 	t.Run("with channels", func(t *testing.T) {
@@ -166,7 +166,7 @@ func TestWalk(t *testing.T) {
 	}
 }
 
-func assertContains(t testing.TB, haystack []string, needle string) {
+func AssertContains(t testing.TB, haystack []string, needle string) {
 	t.Helper()
 	contains := false
 	for _, x := range haystack {
